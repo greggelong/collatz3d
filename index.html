@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>考拉兹城堡 · 3D树状地图 (双语)</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Courier New', 'Microsoft YaHei', monospace;
+        }
+        #info {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.7);
+            color: #0f0;
+            padding: 12px 20px;
+            border-radius: 8px;
+            border-left: 4px solid #0f0;
+            backdrop-filter: blur(4px);
+            pointer-events: none;
+            z-index: 10;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.6);
+            padding: 8px 15px;
+            border-radius: 8px;
+            color: #afa;
+            font-size: 12px;
+            font-family: monospace;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .checkbox-container {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.7);
+            padding: 8px 15px;
+            border-radius: 8px;
+            color: #0f0;
+            font-family: monospace;
+            pointer-events: auto;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .checkbox-container label {
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        input {
+            cursor: pointer;
+        }
+        .help-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #1e3a1e;
+            color: #b3ffb3;
+            border: 1px solid #2e8b2e;
+            border-radius: 40px;
+            width: 44px;
+            height: 44px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+            z-index: 30;
+            transition: 0.2s;
+            font-family: monospace;
+        }
+        .help-button:hover {
+            background: #2e6e2e;
+            box-shadow: 0 0 10px #2eff2e;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0.2s, opacity 0.2s;
+            font-family: 'Courier New', 'Microsoft YaHei', monospace;
+        }
+        .overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .help-card {
+            background: #0a120a;
+            border: 2px solid #2e8b2e;
+            border-radius: 24px;
+            max-width: 650px;
+            width: 90%;
+            padding: 24px;
+            color: #caffca;
+            box-shadow: 0 0 30px rgba(0,255,0,0.2);
+            position: relative;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        .help-card h2 {
+            margin-top: 0;
+            color: #8eff8e;
+            border-bottom: 1px solid #3c8c3c;
+            display: inline-block;
+        }
+        .help-card h3 {
+            color: #aaffaa;
+            margin: 16px 0 8px 0;
+            font-size: 1.2rem;
+        }
+        .help-card p {
+            line-height: 1.5;
+            font-size: 14px;
+        }
+        .formula {
+            background: #051005;
+            padding: 8px 12px;
+            border-left: 3px solid #2ecc2e;
+            font-family: monospace;
+            margin: 12px 0;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .example {
+            background: #071007;
+            padding: 10px;
+            border: 1px solid #3c8c3c;
+            border-radius: 12px;
+            margin: 12px 0;
+        }
+        .close-btn {
+            position: absolute;
+            top: 16px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: #8eff8e;
+            font-size: 24px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .close-btn:hover {
+            color: #ffffaa;
+        }
+        hr {
+            border-color: #2e6e2e;
+            margin: 16px 0;
+        }
+        .door-badge {
+            display: inline-block;
+            background: #1f3a1f;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0.2s, opacity 0.2s;
+        }
+        .celebration.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .celeb-card {
+            background: #0a1a0a;
+            border: 3px solid gold;
+            border-radius: 40px;
+            padding: 30px 40px;
+            text-align: center;
+            color: #ffdd88;
+            box-shadow: 0 0 50px rgba(255,215,0,0.5);
+            max-width: 500px;
+        }
+        .celeb-card h1 {
+            font-size: 3rem;
+            margin: 0;
+            text-shadow: 0 0 10px gold;
+        }
+        .celeb-card button {
+            background: #2e6e2e;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            font-size: 1rem;
+            margin-top: 20px;
+            cursor: pointer;
+            border-radius: 30px;
+            font-family: monospace;
+        }
+        .lang-sep {
+            margin: 12px 0;
+            font-size: 12px;
+            color: #88aa88;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <div>🏰 <strong>COLLATZ CASTLE / 考拉兹城堡</strong> 🏰</div>
+        <div>Current Room / 当前房间: <span id="currentRoom">--</span></div>
+        <div>📡 Steps to 1 / 到1的步数: <span id="stepsTo1">--</span></div>
+        <div id="pathDisplay">🗺️ Path hidden / 路径隐藏</div>
+    </div>
+    <div id="controls">
+        🖱️ Click on colored cubes to teleport / 点击彩色方块传送<br>
+        🎮 Drag to rotate | Right-click to pan / 拖拽旋转 | 右键平移
+    </div>
+    <div class="checkbox-container">
+        <label>
+            <input type="checkbox" id="showPathCheckbox"> Show Collatz Path / 显示考拉兹路径
+        </label>
+        <label>
+            <input type="checkbox" id="showTreeCheckbox"> 🌳 Show 3D Tree Map / 显示3D树状地图
+        </label>
+    </div>
+    <div class="help-button" id="helpButton">❓</div>
+
+    <!-- Help Overlay (Bilingual) -->
+    <div id="helpOverlay" class="overlay">
+        <div class="help-card">
+            <button class="close-btn" id="closeHelp">×</button>
+            
+            <!-- English Section -->
+            <h2>⚡ HOW TO PLAY (Best Strategy)</h2>
+            <p>Your goal is to reach <strong>Room 1</strong>. Each door leads to a neighbor number. The fastest way to 1 is to follow this simple rule:</p>
+            <div class="formula">
+                🚪 <strong>IF the number is EVEN</strong> → go to <span class="door-badge">n ÷ 2</span> (half)<br>
+                🚪 <strong>IF the number is ODD</strong> → go to <span class="door-badge">3 × n + 1</span>
+            </div>
+            <p>That’s the classic Collatz path. It always reaches 1.</p>
+            <div class="example">
+                <strong>📖 Example:</strong><br>
+                Start at <strong>7</strong> (odd) → click <strong>22</strong> (3×7+1)<br>
+                Now at <strong>22</strong> (even) → click <strong>11</strong> (22÷2)<br>
+                Continue: 11 → 34 → 17 → 52 → 26 → 13 → 40 → 20 → 10 → 5 → 16 → 8 → 4 → 2 → 1<br>
+                <em>Just follow the rule and you'll get there!</em>
+            </div>
+            <p>💡 <strong>Hint:</strong> Check "Show Collatz Path" to see the golden doors that follow this rule.<br>
+            🌳 Enable "Show 3D Tree Map" to see a radial tree of connections from your current room.<br>
+            🎉 When you reach room 1, a celebration will appear!</p>
+            
+            <hr>
+            
+            <!-- Chinese Section -->
+            <h2>⚡ 游戏攻略（最佳策略）</h2>
+            <p>你的目标是到达 <strong>房间 1</strong>。每个门通向一个相邻的数字。最快到达 1 的方法就是遵循这个简单规则：</p>
+            <div class="formula">
+                🚪 <strong>如果数字是偶数</strong> → 去 <span class="door-badge">n ÷ 2</span>（一半）<br>
+                🚪 <strong>如果数字是奇数</strong> → 去 <span class="door-badge">3 × n + 1</span>
+            </div>
+            <p>这就是经典的考拉兹路径，它总是能到达 1。</p>
+            <div class="example">
+                <strong>📖 举例：</strong><br>
+                从 <strong>7</strong>（奇数）开始 → 点击 <strong>22</strong> (3×7+1)<br>
+                现在在 <strong>22</strong>（偶数）→ 点击 <strong>11</strong> (22÷2)<br>
+                继续：11 → 34 → 17 → 52 → 26 → 13 → 40 → 20 → 10 → 5 → 16 → 8 → 4 → 2 → 1<br>
+                <em>只要遵循这个规则，你就能到达！</em>
+            </div>
+            <p>💡 <strong>提示：</strong> 勾选“显示考拉兹路径”可以看到遵循规则的金色门。<br>
+            🌳 启用“显示3D树状地图”可以看到从当前房间出发的连接树。<br>
+            🎉 到达房间 1 时会出现庆祝窗口！</p>
+            <hr>
+            <p style="font-size:12px;">考拉兹猜想说每个数字最终都会到达 1。祝你探索愉快！</p>
+        </div>
+    </div>
+
+    <!-- Celebration Modal -->
+    <div id="celebrationModal" class="celebration">
+        <div class="celeb-card">
+            <h1>🎉 CONGRATULATIONS! 🎉</h1>
+            <p>You reached <strong>ROOM 1</strong>!</p>
+            <p>You have completed the Collatz journey.<br>Continue exploring or start a new adventure!</p>
+            <button id="closeCelebration">Continue Exploring</button>
+        </div>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.128.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.128.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+        // ---------- COLLATZ LOGIC ----------
+        function collatzpath(num) {
+            let path = [];
+            let n = Number(num);
+            path.push(n);
+            while (n > 1) {
+                if (n % 2 === 0) n = n / 2;
+                else n = n * 3 + 1;
+                path.push(n);
+            }
+            return path;
+        }
+
+        function collatzNeighbors(num) {
+            let n = Number(num);
+            if (n % 2 === 0) {
+                let neighbors = [n * 2, n / 2];
+                if ((n - 1) % 3 === 0 && (n - 1) / 3 > 0) {
+                    neighbors.unshift((n - 1) / 3);
+                }
+                return [...new Set(neighbors)].sort((a,b) => a-b);
+            } else {
+                return [n * 3 + 1, n * 2];
+            }
+        }
+
+        // ---------- GAME STATE ----------
+        let currentRoom = 12;
+        let showPath = false;
+        let showTree = false;
+        
+        // Three.js setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x050b05);
+        scene.fog = new THREE.FogExp2(0x050b05, 0.008);
+        
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(4, 3, 6);
+        camera.lookAt(0, 0, 0);
+        
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        document.body.appendChild(renderer.domElement);
+        
+        const labelRenderer = new CSS2DRenderer();
+        labelRenderer.setSize(window.innerWidth, window.innerHeight);
+        labelRenderer.domElement.style.position = 'absolute';
+        labelRenderer.domElement.style.top = '0px';
+        labelRenderer.domElement.style.left = '0px';
+        labelRenderer.domElement.style.pointerEvents = 'none';
+        document.body.appendChild(labelRenderer.domElement);
+        
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.rotateSpeed = 1.0;
+        controls.zoomSpeed = 1.2;
+        controls.panSpeed = 0.8;
+        controls.enableZoom = true;
+        
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0x222222);
+        scene.add(ambientLight);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+        dirLight.position.set(2, 5, 3);
+        dirLight.castShadow = true;
+        scene.add(dirLight);
+        const fillLight = new THREE.PointLight(0x336633, 0.4);
+        fillLight.position.set(0, -1, 0);
+        scene.add(fillLight);
+        const rimLight = new THREE.PointLight(0x88aa88, 0.3);
+        rimLight.position.set(-1, 2, -2);
+        scene.add(rimLight);
+        
+        const gridHelper = new THREE.GridHelper(12, 20, 0x33aa33, 0x226622);
+        gridHelper.position.y = -1.2;
+        scene.add(gridHelper);
+        
+        const edgesGeo = new THREE.BoxGeometry(7, 3.5, 7);
+        const edgesMat = new THREE.EdgesGeometry(edgesGeo);
+        const wireframe = new THREE.LineSegments(edgesMat, new THREE.LineBasicMaterial({ color: 0x2a6f2a }));
+        wireframe.position.y = 0;
+        scene.add(wireframe);
+        
+        // Octagonal pedestal
+        const pedestalGeo = new THREE.CylinderGeometry(0.8, 1.2, 0.4, 8);
+        const pedestalMat = new THREE.MeshStandardMaterial({ color: 0x2a4a2a, roughness: 0.7, metalness: 0.1 });
+        const pedestal = new THREE.Mesh(pedestalGeo, pedestalMat);
+        pedestal.position.y = -1.0;
+        pedestal.receiveShadow = true;
+        scene.add(pedestal);
+        
+        // Door management
+        let currentDoors = [];
+        
+        function clearDoors() {
+            currentDoors.forEach(obj => {
+                if (obj.userData.isDoorGroup) {
+                    scene.remove(obj.group);
+                    if (obj.label) scene.remove(obj.label);
+                } else {
+                    scene.remove(obj);
+                }
+            });
+            currentDoors = [];
+        }
+        
+        function createDoorAt(targetNumber, position, color = 0x44aa44) {
+            const group = new THREE.Group();
+            const geometry = new THREE.BoxGeometry(0.9, 1.6, 0.3);
+            const material = new THREE.MeshStandardMaterial({ color: color, emissive: 0x226622, roughness: 0.3, metalness: 0.6 });
+            const cube = new THREE.Mesh(geometry, material);
+            cube.castShadow = true;
+            cube.position.set(0, 0.8, 0);
+            group.add(cube);
+            
+            const frameMat = new THREE.MeshStandardMaterial({ color: 0xccaa66, metalness: 0.8 });
+            const frameGeo = new THREE.BoxGeometry(1.0, 1.8, 0.05);
+            const frame = new THREE.Mesh(frameGeo, frameMat);
+            frame.position.set(0, 0.8, 0.18);
+            group.add(frame);
+            
+            group.position.copy(position);
+            group.userData = { target: targetNumber, isDoor: true };
+            
+            const div = document.createElement('div');
+            div.textContent = `${targetNumber}`;
+            div.style.color = '#aaffaa';
+            div.style.fontSize = '20px';
+            div.style.fontWeight = 'bold';
+            div.style.fontFamily = 'monospace';
+            div.style.textShadow = '1px 1px 0 #000';
+            div.style.backgroundColor = 'rgba(0,0,0,0.6)';
+            div.style.padding = '4px 10px';
+            div.style.borderRadius = '20px';
+            div.style.border = '1px solid #2ecc2e';
+            div.style.backdropFilter = 'blur(4px)';
+            const label = new CSS2DObject(div);
+            label.position.copy(position);
+            label.position.y += 1.2;
+            
+            scene.add(group);
+            scene.add(label);
+            currentDoors.push({ group, label, userData: { isDoorGroup: true, target: targetNumber } });
+        }
+        
+        // ---------- 3D TREE VISUALIZATION (robust cleanup using arrays) ----------
+        let treeObjects = []; // array to store all tree meshes and CSS2D objects
+        
+        function clearTree() {
+            treeObjects.forEach(obj => {
+                scene.remove(obj);
+                if (obj.isMesh) {
+                    if (obj.geometry) obj.geometry.dispose();
+                    if (obj.material) obj.material.dispose();
+                }
+            });
+            treeObjects = [];
+        }
+        
+        function createCylinderBetweenPoints(p1, p2, radius = 0.06, color = 0x88ff88) {
+            const start = new THREE.Vector3(p1.x, p1.y, p1.z);
+            const end = new THREE.Vector3(p2.x, p2.y, p2.z);
+            const direction = new THREE.Vector3().subVectors(end, start);
+            const length = direction.length();
+            const geometry = new THREE.CylinderGeometry(radius, radius, length, 8);
+            const material = new THREE.MeshStandardMaterial({ color: color, emissive: 0x226622 });
+            const cylinder = new THREE.Mesh(geometry, material);
+            const center = start.clone().add(end).multiplyScalar(0.5);
+            cylinder.position.copy(center);
+            cylinder.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), direction.clone().normalize());
+            return cylinder;
+        }
+        
+        function buildTree(rootRoom) {
+            if (!showTree) return;
+            clearTree();
+            
+            const maxDepth = 2;
+            const radiusStep = 1.5;
+            const nodes = new Map();
+            const edges = [];
+            const queue = [{ num: rootRoom, depth: 0, parent: null }];
+            const visited = new Set();
+            
+            while (queue.length > 0) {
+                const { num, depth, parent } = queue.shift();
+                if (depth > maxDepth) continue;
+                if (visited.has(num)) continue;
+                visited.add(num);
+                nodes.set(num, { depth, children: [] });
+                if (parent !== null) edges.push({ from: parent, to: num });
+                const children = collatzNeighbors(num);
+                for (let child of children) {
+                    if (!visited.has(child)) {
+                        nodes.get(num).children.push(child);
+                        queue.push({ num: child, depth: depth + 1, parent: num });
+                    }
+                }
+            }
+            
+            if (nodes.size === 0) return;
+            
+            const depthMap = new Map();
+            for (let [num, data] of nodes) {
+                if (!depthMap.has(data.depth)) depthMap.set(data.depth, []);
+                depthMap.get(data.depth).push(num);
+            }
+            
+            for (let [depth, numbers] of depthMap) {
+                const radius = depth * radiusStep;
+                const count = numbers.length;
+                numbers.forEach((num, idx) => {
+                    const angle = (idx / count) * Math.PI * 2;
+                    const x = Math.cos(angle) * radius;
+                    const z = Math.sin(angle) * radius;
+                    const y = depth * 0.3;
+                    nodes.get(num).position = new THREE.Vector3(x, y, z);
+                });
+            }
+            
+            for (let [num, data] of nodes) {
+                const pos = data.position;
+                const size = (data.depth === 0) ? 0.3 : 0.2;
+                const color = (num === rootRoom) ? 0xffaa44 : 0x44aa44;
+                const sphereGeo = new THREE.SphereGeometry(size, 24, 24);
+                const material = new THREE.MeshStandardMaterial({ color: color, emissive: 0x226622 });
+                const sphere = new THREE.Mesh(sphereGeo, material);
+                sphere.position.copy(pos);
+                scene.add(sphere);
+                treeObjects.push(sphere);
+                
+                const div = document.createElement('div');
+                div.textContent = `${num}`;
+                div.style.color = '#aaffaa';
+                div.style.fontSize = '12px';
+                div.style.fontWeight = 'bold';
+                div.style.backgroundColor = 'rgba(0,0,0,0.6)';
+                div.style.padding = '2px 6px';
+                div.style.borderRadius = '12px';
+                div.style.border = '1px solid #2ecc2e';
+                div.style.fontFamily = 'monospace';
+                const label = new CSS2DObject(div);
+                label.position.copy(pos);
+                label.position.y += 0.3;
+                scene.add(label);
+                treeObjects.push(label);
+            }
+            
+            for (let edge of edges) {
+                const fromPos = nodes.get(edge.from).position;
+                const toPos = nodes.get(edge.to).position;
+                if (fromPos && toPos) {
+                    const cylinder = createCylinderBetweenPoints(fromPos, toPos, 0.05, 0x88ff88);
+                    scene.add(cylinder);
+                    treeObjects.push(cylinder);
+                }
+            }
+        }
+        
+        // Celebration
+        function showCelebration() {
+            document.getElementById('celebrationModal').classList.add('active');
+        }
+        function hideCelebration() {
+            document.getElementById('celebrationModal').classList.remove('active');
+        }
+        let hasCelebratedForRoom1 = false;
+        
+        function buildRoom(roomNumber) {
+            clearDoors();
+            const neighbors = collatzNeighbors(roomNumber);
+            const positions = [
+                new THREE.Vector3(-2.2, -0.2, 0),
+                new THREE.Vector3(0, -0.2, -2.2),
+                new THREE.Vector3(2.2, -0.2, 0)
+            ];
+            let pathSet = null;
+            if (showPath) pathSet = new Set(collatzpath(roomNumber));
+            for (let i = 0; i < neighbors.length && i < 3; i++) {
+                const neighbor = neighbors[i];
+                let color = 0x44aa44;
+                if (pathSet && pathSet.has(neighbor)) color = 0xffaa44;
+                if (neighbor === 1) color = 0xcc6644;
+                createDoorAt(neighbor, positions[i], color);
+            }
+            document.getElementById('currentRoom').innerText = roomNumber;
+            const steps = collatzpath(roomNumber).length - 1;
+            document.getElementById('stepsTo1').innerText = steps;
+            if (showPath) {
+                document.getElementById('pathDisplay').innerHTML = `🗺️ Collatz Path: ${collatzpath(roomNumber).join(' → ')}`;
+            } else {
+                document.getElementById('pathDisplay').innerHTML = `🗺️ Path hidden (check box to reveal) / 路径隐藏（勾选显示）`;
+            }
+            if (roomNumber === 1) {
+                if (!hasCelebratedForRoom1) { showCelebration(); hasCelebratedForRoom1 = true; }
+            } else { hasCelebratedForRoom1 = false; }
+            if (showTree) buildTree(roomNumber);
+        }
+        
+        // Click handling
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        function onMouseClick(event) {
+            mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1;
+            mouse.y = -(event.clientY / renderer.domElement.clientHeight) * 2 + 1;
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(scene.children, true);
+            for (let hit of intersects) {
+                let obj = hit.object;
+                while (obj.parent && !obj.userData.isDoor) obj = obj.parent;
+                if (obj.userData && obj.userData.isDoor && obj.userData.target) {
+                    const target = obj.userData.target;
+                    if (target !== undefined && target !== currentRoom) {
+                        currentRoom = target;
+                        buildRoom(currentRoom);
+                    }
+                    break;
+                }
+            }
+        }
+        window.addEventListener('click', onMouseClick, false);
+        
+        // Toggles
+        document.getElementById('showPathCheckbox').addEventListener('change', (e) => {
+            showPath = e.target.checked;
+            buildRoom(currentRoom);
+        });
+        document.getElementById('showTreeCheckbox').addEventListener('change', (e) => {
+            showTree = e.target.checked;
+            if (showTree) buildTree(currentRoom);
+            else clearTree();
+        });
+        
+        // Random start
+        const startRooms = [12, 7, 84, 15, 301, 56, 23, 96, 42];
+        currentRoom = startRooms[Math.floor(Math.random() * startRooms.length)];
+        buildRoom(currentRoom);
+        
+        // Particles
+        const particleGeo = new THREE.BufferGeometry();
+        const particleCount = 400;
+        const particlePositions = new Float32Array(particleCount * 3);
+        for (let i = 0; i < particleCount; i++) {
+            particlePositions[i*3] = (Math.random() - 0.5) * 12;
+            particlePositions[i*3+1] = (Math.random() - 0.5) * 4;
+            particlePositions[i*3+2] = (Math.random() - 0.5) * 12;
+        }
+        particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
+        const particles = new THREE.Points(particleGeo, new THREE.PointsMaterial({ color: 0x88ff88, size: 0.05, transparent: true, opacity: 0.5 }));
+        scene.add(particles);
+        function animateParticles() { particles.rotation.y += 0.002; particles.rotation.x += 0.001; requestAnimationFrame(animateParticles); }
+        animateParticles();
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+            labelRenderer.render(scene, camera);
+        }
+        animate();
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            labelRenderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        // Help overlay
+        const helpBtn = document.getElementById('helpButton');
+        const overlay = document.getElementById('helpOverlay');
+        const closeHelp = document.getElementById('closeHelp');
+        helpBtn.addEventListener('click', () => overlay.classList.add('active'));
+        closeHelp.addEventListener('click', () => overlay.classList.remove('active'));
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('active'); });
+        
+        // Celebration close
+        document.getElementById('closeCelebration').addEventListener('click', hideCelebration);
+    </script>
+</body>
+</html>
