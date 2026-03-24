@@ -229,6 +229,9 @@
             font-size: 12px;
             color: #88aa88;
         }
+        canvas {
+    touch-action: pan-x pan-y;   /* allow panning, but not pinch‑zoom on canvas */
+}
     </style>
 </head>
 <body>
@@ -650,25 +653,41 @@
        // window.addEventListener('click', onMouseClick, false);
         // Unified function to handle both mouse and touch
 function onPointer(event) {
-    // Get coordinates from mouse or touch
+    // Determine if the touch/mouse target is the canvas or its children
+    let targetElement = event.target;
+    const canvas = renderer.domElement;
+    
+    // For touch events, targetElement might be an element inside the canvas,
+    // but we need to see if it's actually within the canvas area.
+    // Also, if the event originated from a UI element (checkbox, button, etc.),
+    // we should let the browser handle it normally.
+    if (!canvas.contains(targetElement)) {
+        // The click/touch was outside the canvas – let it go to the UI
+        return;
+    }
+    
+    // Prevent default only if we are going to process the canvas tap.
+    // This stops scrolling/zooming on the canvas but leaves checkboxes working.
+    if (event.touches) {
+        event.preventDefault();
+    }
+    
+    // Get coordinates
     let clientX, clientY;
     if (event.touches) {
-        // Touch event
         clientX = event.touches[0].clientX;
         clientY = event.touches[0].clientY;
-        event.preventDefault(); // Prevent scrolling while tapping
     } else {
-        // Mouse event
         clientX = event.clientX;
         clientY = event.clientY;
     }
     
-    // Normalize coordinates relative to the renderer's canvas
-    const rect = renderer.domElement.getBoundingClientRect();
+    // Normalize coordinates relative to the canvas
+    const rect = canvas.getBoundingClientRect();
     const mouseX = ((clientX - rect.left) / rect.width) * 2 - 1;
     const mouseY = -((clientY - rect.top) / rect.height) * 2 + 1;
     
-    // Raycast from camera through the normalized coordinates
+    // Raycast
     raycaster.setFromCamera(new THREE.Vector2(mouseX, mouseY), camera);
     const intersects = raycaster.intersectObjects(scene.children, true);
     for (let hit of intersects) {
@@ -687,7 +706,7 @@ function onPointer(event) {
 
 // Attach both mouse and touch listeners
 window.addEventListener('click', onPointer);
-window.addEventListener('touchstart', onPointer, { passive: false }); // passive false allows preventDefault
+window.addEventListener('touchstart', onPointer, { passive: false }); // passive false allows preventDefault when needed
         
         // Toggles
         document.getElementById('showPathCheckbox').addEventListener('change', (e) => {
