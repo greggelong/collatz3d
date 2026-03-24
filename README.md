@@ -1,4 +1,4 @@
-```markdown
+
 # 🏰 Collatz Castle 3D – Teleport Adventure
 
 > An immersive 3D exploration of the Collatz Conjecture, built from a classic text adventure and enhanced with modern graphics and AI assistance.
@@ -22,7 +22,7 @@ This project started as a text‑based game written in p5.js, where you navigate
 
 ## 🖥️ Running the Game
 
-### Offline (Recommended)
+### Offline
 
 1. **Download Three.js**  
    Place the following files in a `lib/` folder next to your `index.html`:
