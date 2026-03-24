@@ -647,7 +647,47 @@
                 }
             }
         }
-        window.addEventListener('click', onMouseClick, false);
+       // window.addEventListener('click', onMouseClick, false);
+        // Unified function to handle both mouse and touch
+function onPointer(event) {
+    // Get coordinates from mouse or touch
+    let clientX, clientY;
+    if (event.touches) {
+        // Touch event
+        clientX = event.touches[0].clientX;
+        clientY = event.touches[0].clientY;
+        event.preventDefault(); // Prevent scrolling while tapping
+    } else {
+        // Mouse event
+        clientX = event.clientX;
+        clientY = event.clientY;
+    }
+    
+    // Normalize coordinates relative to the renderer's canvas
+    const rect = renderer.domElement.getBoundingClientRect();
+    const mouseX = ((clientX - rect.left) / rect.width) * 2 - 1;
+    const mouseY = -((clientY - rect.top) / rect.height) * 2 + 1;
+    
+    // Raycast from camera through the normalized coordinates
+    raycaster.setFromCamera(new THREE.Vector2(mouseX, mouseY), camera);
+    const intersects = raycaster.intersectObjects(scene.children, true);
+    for (let hit of intersects) {
+        let obj = hit.object;
+        while (obj.parent && !obj.userData.isDoor) obj = obj.parent;
+        if (obj.userData && obj.userData.isDoor && obj.userData.target) {
+            const target = obj.userData.target;
+            if (target !== undefined && target !== currentRoom) {
+                currentRoom = target;
+                buildRoom(currentRoom);
+            }
+            break;
+        }
+    }
+}
+
+// Attach both mouse and touch listeners
+window.addEventListener('click', onPointer);
+window.addEventListener('touchstart', onPointer, { passive: false }); // passive false allows preventDefault
         
         // Toggles
         document.getElementById('showPathCheckbox').addEventListener('change', (e) => {
