@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -10,11 +11,12 @@
             overflow: hidden;
             font-family: 'Courier New', 'Microsoft YaHei', monospace;
         }
+
         #info {
             position: absolute;
             top: 20px;
             left: 20px;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0, 0, 0, 0.7);
             color: #0f0;
             padding: 12px 20px;
             border-radius: 8px;
@@ -25,11 +27,12 @@
             font-size: 14px;
             line-height: 1.5;
         }
+
         #controls {
             position: absolute;
             bottom: 20px;
             left: 20px;
-            background: rgba(0,0,0,0.6);
+            background: rgba(0, 0, 0, 0.6);
             padding: 8px 15px;
             border-radius: 8px;
             color: #afa;
@@ -38,11 +41,12 @@
             pointer-events: none;
             z-index: 10;
         }
+
         .checkbox-container {
             position: absolute;
             bottom: 20px;
             right: 20px;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0, 0, 0, 0.7);
             padding: 8px 15px;
             border-radius: 8px;
             color: #0f0;
@@ -53,6 +57,7 @@
             flex-direction: column;
             gap: 8px;
         }
+
         .checkbox-container label {
             cursor: pointer;
             user-select: none;
@@ -60,9 +65,11 @@
             align-items: center;
             gap: 8px;
         }
+
         input {
             cursor: pointer;
         }
+
         .help-button {
             position: absolute;
             top: 20px;
@@ -84,17 +91,19 @@
             transition: 0.2s;
             font-family: monospace;
         }
+
         .help-button:hover {
             background: #2e6e2e;
             box-shadow: 0 0 10px #2eff2e;
         }
+
         .overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.85);
+            background: rgba(0, 0, 0, 0.85);
             backdrop-filter: blur(5px);
             display: flex;
             align-items: center;
@@ -105,10 +114,12 @@
             transition: visibility 0.2s, opacity 0.2s;
             font-family: 'Courier New', 'Microsoft YaHei', monospace;
         }
+
         .overlay.active {
             visibility: visible;
             opacity: 1;
         }
+
         .help-card {
             background: #0a120a;
             border: 2px solid #2e8b2e;
@@ -117,26 +128,30 @@
             width: 90%;
             padding: 24px;
             color: #caffca;
-            box-shadow: 0 0 30px rgba(0,255,0,0.2);
+            box-shadow: 0 0 30px rgba(0, 255, 0, 0.2);
             position: relative;
             max-height: 85vh;
             overflow-y: auto;
         }
+
         .help-card h2 {
             margin-top: 0;
             color: #8eff8e;
             border-bottom: 1px solid #3c8c3c;
             display: inline-block;
         }
+
         .help-card h3 {
             color: #aaffaa;
             margin: 16px 0 8px 0;
             font-size: 1.2rem;
         }
+
         .help-card p {
             line-height: 1.5;
             font-size: 14px;
         }
+
         .formula {
             background: #051005;
             padding: 8px 12px;
@@ -146,6 +161,7 @@
             font-size: 16px;
             font-weight: bold;
         }
+
         .example {
             background: #071007;
             padding: 10px;
@@ -153,6 +169,7 @@
             border-radius: 12px;
             margin: 12px 0;
         }
+
         .close-btn {
             position: absolute;
             top: 16px;
@@ -164,13 +181,16 @@
             cursor: pointer;
             font-weight: bold;
         }
+
         .close-btn:hover {
             color: #ffffaa;
         }
+
         hr {
             border-color: #2e6e2e;
             margin: 16px 0;
         }
+
         .door-badge {
             display: inline-block;
             background: #1f3a1f;
@@ -178,13 +198,14 @@
             border-radius: 20px;
             font-weight: bold;
         }
+
         .celebration {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0, 0, 0, 0.7);
             backdrop-filter: blur(8px);
             display: flex;
             align-items: center;
@@ -194,10 +215,12 @@
             opacity: 0;
             transition: visibility 0.2s, opacity 0.2s;
         }
+
         .celebration.active {
             visibility: visible;
             opacity: 1;
         }
+
         .celeb-card {
             background: #0a1a0a;
             border: 3px solid gold;
@@ -205,14 +228,16 @@
             padding: 30px 40px;
             text-align: center;
             color: #ffdd88;
-            box-shadow: 0 0 50px rgba(255,215,0,0.5);
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.5);
             max-width: 500px;
         }
+
         .celeb-card h1 {
             font-size: 3rem;
             margin: 0;
             text-shadow: 0 0 10px gold;
         }
+
         .celeb-card button {
             background: #2e6e2e;
             border: none;
@@ -224,16 +249,20 @@
             border-radius: 30px;
             font-family: monospace;
         }
+
         .lang-sep {
             margin: 12px 0;
             font-size: 12px;
             color: #88aa88;
         }
+
         canvas {
-    touch-action: pan-x pan-y;   /* allow panning, but not pinch‑zoom on canvas */
-}
+            touch-action: pan-x pan-y;
+            /* allow panning, but not pinch‑zoom on canvas */
+        }
     </style>
 </head>
+
 <body>
     <div id="info">
         <div>🏰 <strong>COLLATZ CASTLE / 考拉兹城堡</strong> 🏰</div>
@@ -259,10 +288,11 @@
     <div id="helpOverlay" class="overlay">
         <div class="help-card">
             <button class="close-btn" id="closeHelp">×</button>
-            
+
             <!-- English Section -->
             <h2>⚡ HOW TO PLAY (Best Strategy)</h2>
-            <p>Your goal is to reach <strong>Room 1</strong>. Each door leads to a neighbor number. The fastest way to 1 is to follow this simple rule:</p>
+            <p>Your goal is to reach <strong>Room 1</strong>. Each door leads to a neighbor number. The fastest way to 1
+                is to follow this simple rule:</p>
             <div class="formula">
                 🚪 <strong>IF the number is EVEN</strong> → go to <span class="door-badge">n ÷ 2</span> (half)<br>
                 🚪 <strong>IF the number is ODD</strong> → go to <span class="door-badge">3 × n + 1</span>
@@ -276,11 +306,11 @@
                 <em>Just follow the rule and you'll get there!</em>
             </div>
             <p>💡 <strong>Hint:</strong> Check "Show Collatz Path" to see the golden doors that follow this rule.<br>
-            🌳 Enable "Show 3D Tree Map" to see a radial tree of connections from your current room.<br>
-            🎉 When you reach room 1, a celebration will appear!</p>
-            
+                🌳 Enable "Show 3D Tree Map" to see a radial tree of connections from your current room.<br>
+                🎉 When you reach room 1, a celebration will appear!</p>
+
             <hr>
-            
+
             <!-- Chinese Section -->
             <h2>⚡ 游戏攻略（最佳策略）</h2>
             <p>你的目标是到达 <strong>房间 1</strong>。每个门通向一个相邻的数字。最快到达 1 的方法就是遵循这个简单规则：</p>
@@ -297,8 +327,8 @@
                 <em>只要遵循这个规则，你就能到达！</em>
             </div>
             <p>💡 <strong>提示：</strong> 勾选“显示考拉兹路径”可以看到遵循规则的金色门。<br>
-            🌳 启用“显示3D树状地图”可以看到从当前房间出发的连接树。<br>
-            🎉 到达房间 1 时会出现庆祝窗口！</p>
+                🌳 启用“显示3D树状地图”可以看到从当前房间出发的连接树。<br>
+                🎉 到达房间 1 时会出现庆祝窗口！</p>
             <hr>
             <p style="font-size:12px;">考拉兹猜想说每个数字最终都会到达 1。祝你探索愉快！</p>
         </div>
@@ -348,7 +378,7 @@
                 if ((n - 1) % 3 === 0 && (n - 1) / 3 > 0) {
                     neighbors.unshift((n - 1) / 3);
                 }
-                return [...new Set(neighbors)].sort((a,b) => a-b);
+                return [...new Set(neighbors)].sort((a, b) => a - b);
             } else {
                 return [n * 3 + 1, n * 2];
             }
@@ -358,21 +388,21 @@
         let currentRoom = 12;
         let showPath = false;
         let showTree = false;
-        
+
         // Three.js setup
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0x050b05);
         scene.fog = new THREE.FogExp2(0x050b05, 0.008);
-        
+
         const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.set(4, 3, 6);
         camera.lookAt(0, 0, 0);
-        
+
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMap.enabled = true;
         document.body.appendChild(renderer.domElement);
-        
+
         const labelRenderer = new CSS2DRenderer();
         labelRenderer.setSize(window.innerWidth, window.innerHeight);
         labelRenderer.domElement.style.position = 'absolute';
@@ -380,7 +410,7 @@
         labelRenderer.domElement.style.left = '0px';
         labelRenderer.domElement.style.pointerEvents = 'none';
         document.body.appendChild(labelRenderer.domElement);
-        
+
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.05;
@@ -388,7 +418,7 @@
         controls.zoomSpeed = 1.2;
         controls.panSpeed = 0.8;
         controls.enableZoom = true;
-        
+
         // Lighting
         const ambientLight = new THREE.AmbientLight(0x222222);
         scene.add(ambientLight);
@@ -402,17 +432,17 @@
         const rimLight = new THREE.PointLight(0x88aa88, 0.3);
         rimLight.position.set(-1, 2, -2);
         scene.add(rimLight);
-        
+
         const gridHelper = new THREE.GridHelper(12, 20, 0x33aa33, 0x226622);
         gridHelper.position.y = -1.2;
         scene.add(gridHelper);
-        
+
         const edgesGeo = new THREE.BoxGeometry(7, 3.5, 7);
         const edgesMat = new THREE.EdgesGeometry(edgesGeo);
         const wireframe = new THREE.LineSegments(edgesMat, new THREE.LineBasicMaterial({ color: 0x2a6f2a }));
         wireframe.position.y = 0;
         scene.add(wireframe);
-        
+
         // Octagonal pedestal
         const pedestalGeo = new THREE.CylinderGeometry(0.8, 1.2, 0.4, 8);
         const pedestalMat = new THREE.MeshStandardMaterial({ color: 0x2a4a2a, roughness: 0.7, metalness: 0.1 });
@@ -420,10 +450,10 @@
         pedestal.position.y = -1.0;
         pedestal.receiveShadow = true;
         scene.add(pedestal);
-        
+
         // Door management
         let currentDoors = [];
-        
+
         function clearDoors() {
             currentDoors.forEach(obj => {
                 if (obj.userData.isDoorGroup) {
@@ -435,7 +465,7 @@
             });
             currentDoors = [];
         }
-        
+
         function createDoorAt(targetNumber, position, color = 0x44aa44) {
             const group = new THREE.Group();
             const geometry = new THREE.BoxGeometry(0.9, 1.6, 0.3);
@@ -444,16 +474,16 @@
             cube.castShadow = true;
             cube.position.set(0, 0.8, 0);
             group.add(cube);
-            
+
             const frameMat = new THREE.MeshStandardMaterial({ color: 0xccaa66, metalness: 0.8 });
             const frameGeo = new THREE.BoxGeometry(1.0, 1.8, 0.05);
             const frame = new THREE.Mesh(frameGeo, frameMat);
             frame.position.set(0, 0.8, 0.18);
             group.add(frame);
-            
+
             group.position.copy(position);
             group.userData = { target: targetNumber, isDoor: true };
-            
+
             const div = document.createElement('div');
             div.textContent = `${targetNumber}`;
             div.style.color = '#aaffaa';
@@ -469,15 +499,15 @@
             const label = new CSS2DObject(div);
             label.position.copy(position);
             label.position.y += 1.2;
-            
+
             scene.add(group);
             scene.add(label);
             currentDoors.push({ group, label, userData: { isDoorGroup: true, target: targetNumber } });
         }
-        
+
         // ---------- 3D TREE VISUALIZATION (robust cleanup using arrays) ----------
         let treeObjects = []; // array to store all tree meshes and CSS2D objects
-        
+
         function clearTree() {
             treeObjects.forEach(obj => {
                 scene.remove(obj);
@@ -488,7 +518,7 @@
             });
             treeObjects = [];
         }
-        
+
         function createCylinderBetweenPoints(p1, p2, radius = 0.06, color = 0x88ff88) {
             const start = new THREE.Vector3(p1.x, p1.y, p1.z);
             const end = new THREE.Vector3(p2.x, p2.y, p2.z);
@@ -499,21 +529,21 @@
             const cylinder = new THREE.Mesh(geometry, material);
             const center = start.clone().add(end).multiplyScalar(0.5);
             cylinder.position.copy(center);
-            cylinder.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), direction.clone().normalize());
+            cylinder.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), direction.clone().normalize());
             return cylinder;
         }
-        
+
         function buildTree(rootRoom) {
             if (!showTree) return;
             clearTree();
-            
+
             const maxDepth = 2;
             const radiusStep = 1.5;
             const nodes = new Map();
             const edges = [];
             const queue = [{ num: rootRoom, depth: 0, parent: null }];
             const visited = new Set();
-            
+
             while (queue.length > 0) {
                 const { num, depth, parent } = queue.shift();
                 if (depth > maxDepth) continue;
@@ -529,15 +559,15 @@
                     }
                 }
             }
-            
+
             if (nodes.size === 0) return;
-            
+
             const depthMap = new Map();
             for (let [num, data] of nodes) {
                 if (!depthMap.has(data.depth)) depthMap.set(data.depth, []);
                 depthMap.get(data.depth).push(num);
             }
-            
+
             for (let [depth, numbers] of depthMap) {
                 const radius = depth * radiusStep;
                 const count = numbers.length;
@@ -549,7 +579,7 @@
                     nodes.get(num).position = new THREE.Vector3(x, y, z);
                 });
             }
-            
+
             for (let [num, data] of nodes) {
                 const pos = data.position;
                 const size = (data.depth === 0) ? 0.3 : 0.2;
@@ -560,7 +590,7 @@
                 sphere.position.copy(pos);
                 scene.add(sphere);
                 treeObjects.push(sphere);
-                
+
                 const div = document.createElement('div');
                 div.textContent = `${num}`;
                 div.style.color = '#aaffaa';
@@ -577,7 +607,7 @@
                 scene.add(label);
                 treeObjects.push(label);
             }
-            
+
             for (let edge of edges) {
                 const fromPos = nodes.get(edge.from).position;
                 const toPos = nodes.get(edge.to).position;
@@ -588,7 +618,7 @@
                 }
             }
         }
-        
+
         // Celebration
         function showCelebration() {
             document.getElementById('celebrationModal').classList.add('active');
@@ -597,7 +627,7 @@
             document.getElementById('celebrationModal').classList.remove('active');
         }
         let hasCelebratedForRoom1 = false;
-        
+
         function buildRoom(roomNumber) {
             clearDoors();
             const neighbors = collatzNeighbors(roomNumber);
@@ -628,7 +658,7 @@
             } else { hasCelebratedForRoom1 = false; }
             if (showTree) buildTree(roomNumber);
         }
-        
+
         // Click handling
         const raycaster = new THREE.Raycaster();
         const mouse = new THREE.Vector2();
@@ -650,64 +680,64 @@
                 }
             }
         }
-       // window.addEventListener('click', onMouseClick, false);
+        // window.addEventListener('click', onMouseClick, false);
         // Unified function to handle both mouse and touch
-function onPointer(event) {
-    // Determine if the touch/mouse target is the canvas or its children
-    let targetElement = event.target;
-    const canvas = renderer.domElement;
-    
-    // For touch events, targetElement might be an element inside the canvas,
-    // but we need to see if it's actually within the canvas area.
-    // Also, if the event originated from a UI element (checkbox, button, etc.),
-    // we should let the browser handle it normally.
-    if (!canvas.contains(targetElement)) {
-        // The click/touch was outside the canvas – let it go to the UI
-        return;
-    }
-    
-    // Prevent default only if we are going to process the canvas tap.
-    // This stops scrolling/zooming on the canvas but leaves checkboxes working.
-    if (event.touches) {
-        event.preventDefault();
-    }
-    
-    // Get coordinates
-    let clientX, clientY;
-    if (event.touches) {
-        clientX = event.touches[0].clientX;
-        clientY = event.touches[0].clientY;
-    } else {
-        clientX = event.clientX;
-        clientY = event.clientY;
-    }
-    
-    // Normalize coordinates relative to the canvas
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = ((clientX - rect.left) / rect.width) * 2 - 1;
-    const mouseY = -((clientY - rect.top) / rect.height) * 2 + 1;
-    
-    // Raycast
-    raycaster.setFromCamera(new THREE.Vector2(mouseX, mouseY), camera);
-    const intersects = raycaster.intersectObjects(scene.children, true);
-    for (let hit of intersects) {
-        let obj = hit.object;
-        while (obj.parent && !obj.userData.isDoor) obj = obj.parent;
-        if (obj.userData && obj.userData.isDoor && obj.userData.target) {
-            const target = obj.userData.target;
-            if (target !== undefined && target !== currentRoom) {
-                currentRoom = target;
-                buildRoom(currentRoom);
-            }
-            break;
-        }
-    }
-}
+        function onPointer(event) {
+            // Determine if the touch/mouse target is the canvas or its children
+            let targetElement = event.target;
+            const canvas = renderer.domElement;
 
-// Attach both mouse and touch listeners
-window.addEventListener('click', onPointer);
-window.addEventListener('touchstart', onPointer, { passive: false }); // passive false allows preventDefault when needed
-        
+            // For touch events, targetElement might be an element inside the canvas,
+            // but we need to see if it's actually within the canvas area.
+            // Also, if the event originated from a UI element (checkbox, button, etc.),
+            // we should let the browser handle it normally.
+            if (!canvas.contains(targetElement)) {
+                // The click/touch was outside the canvas – let it go to the UI
+                return;
+            }
+
+            // Prevent default only if we are going to process the canvas tap.
+            // This stops scrolling/zooming on the canvas but leaves checkboxes working.
+            if (event.touches) {
+                event.preventDefault();
+            }
+
+            // Get coordinates
+            let clientX, clientY;
+            if (event.touches) {
+                clientX = event.touches[0].clientX;
+                clientY = event.touches[0].clientY;
+            } else {
+                clientX = event.clientX;
+                clientY = event.clientY;
+            }
+
+            // Normalize coordinates relative to the canvas
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = ((clientX - rect.left) / rect.width) * 2 - 1;
+            const mouseY = -((clientY - rect.top) / rect.height) * 2 + 1;
+
+            // Raycast
+            raycaster.setFromCamera(new THREE.Vector2(mouseX, mouseY), camera);
+            const intersects = raycaster.intersectObjects(scene.children, true);
+            for (let hit of intersects) {
+                let obj = hit.object;
+                while (obj.parent && !obj.userData.isDoor) obj = obj.parent;
+                if (obj.userData && obj.userData.isDoor && obj.userData.target) {
+                    const target = obj.userData.target;
+                    if (target !== undefined && target !== currentRoom) {
+                        currentRoom = target;
+                        buildRoom(currentRoom);
+                    }
+                    break;
+                }
+            }
+        }
+
+        // Attach both mouse and touch listeners
+        window.addEventListener('click', onPointer);
+        window.addEventListener('touchstart', onPointer, { passive: false }); // passive false allows preventDefault when needed
+
         // Toggles
         document.getElementById('showPathCheckbox').addEventListener('change', (e) => {
             showPath = e.target.checked;
@@ -718,27 +748,27 @@ window.addEventListener('touchstart', onPointer, { passive: false }); // passive
             if (showTree) buildTree(currentRoom);
             else clearTree();
         });
-        
+
         // Random start
-        const startRooms = [12, 7, 84, 15, 301, 56, 23, 96, 42];
+        const startRooms = [12, 7, 84, 15, 301, 56, 23, 96, 42, 27, 27, 27, 27];
         currentRoom = startRooms[Math.floor(Math.random() * startRooms.length)];
         buildRoom(currentRoom);
-        
+
         // Particles
         const particleGeo = new THREE.BufferGeometry();
         const particleCount = 400;
         const particlePositions = new Float32Array(particleCount * 3);
         for (let i = 0; i < particleCount; i++) {
-            particlePositions[i*3] = (Math.random() - 0.5) * 12;
-            particlePositions[i*3+1] = (Math.random() - 0.5) * 4;
-            particlePositions[i*3+2] = (Math.random() - 0.5) * 12;
+            particlePositions[i * 3] = (Math.random() - 0.5) * 12;
+            particlePositions[i * 3 + 1] = (Math.random() - 0.5) * 4;
+            particlePositions[i * 3 + 2] = (Math.random() - 0.5) * 12;
         }
         particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3));
         const particles = new THREE.Points(particleGeo, new THREE.PointsMaterial({ color: 0x88ff88, size: 0.05, transparent: true, opacity: 0.5 }));
         scene.add(particles);
         function animateParticles() { particles.rotation.y += 0.002; particles.rotation.x += 0.001; requestAnimationFrame(animateParticles); }
         animateParticles();
-        
+
         function animate() {
             requestAnimationFrame(animate);
             controls.update();
@@ -752,7 +782,7 @@ window.addEventListener('touchstart', onPointer, { passive: false }); // passive
             renderer.setSize(window.innerWidth, window.innerHeight);
             labelRenderer.setSize(window.innerWidth, window.innerHeight);
         });
-        
+
         // Help overlay
         const helpBtn = document.getElementById('helpButton');
         const overlay = document.getElementById('helpOverlay');
@@ -760,9 +790,10 @@ window.addEventListener('touchstart', onPointer, { passive: false }); // passive
         helpBtn.addEventListener('click', () => overlay.classList.add('active'));
         closeHelp.addEventListener('click', () => overlay.classList.remove('active'));
         overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('active'); });
-        
+
         // Celebration close
         document.getElementById('closeCelebration').addEventListener('click', hideCelebration);
     </script>
 </body>
+
 </html>
